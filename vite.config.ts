@@ -16,7 +16,7 @@ export default defineConfig({
       input: {
         devtools: resolve(root, 'devtools', 'index.html'),
         popup: resolve(root, 'popup', 'index.html')
-      }
+      },
     }
   }
 })
