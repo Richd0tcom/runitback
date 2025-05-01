@@ -38,3 +38,11 @@ export interface RequestCollection {
     updatedAt: number
     requestCount?: number
 }
+
+export interface GetRequestFilter {
+    url?: string;
+    method?: string;
+    collectionId?: string;
+    timeStart?: number;
+    timeEnd?: number;
+}
