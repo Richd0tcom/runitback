@@ -1,4 +1,4 @@
-export interface RequestHeaders {
+export interface ReqResHeaders {
     [key: string]: string
 }
 
@@ -6,7 +6,7 @@ export interface RequestData {
     id?: string;
     url: string;
     method: string;
-    headers: RequestHeaders
+    headers: ReqResHeaders
     body?: string | null
     timestamp: number
     contentType?: string
@@ -24,7 +24,7 @@ export interface ResponseData {
     body?: string | null
     status: number
     statusText: string;
-    headers: RequestHeaders;
+    headers: ReqResHeaders;
     timestamp: number
     duration?: number
     size?: number
