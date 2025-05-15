@@ -104,7 +104,7 @@ class Storage {
 
 
 
-  async getRequests(filter: GetRequestFilter): Promise<RequestData[]> {
+  async getRequests(filter?: GetRequestFilter): Promise<RequestData[]> {
     await this.mustDBInit()
 
     return new Promise((resolve, reject)=> {
