@@ -83,4 +83,4 @@ class Replay {
     }
 }
 
-export const replayService = new Replay();
+export default new Replay();
