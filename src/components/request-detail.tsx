@@ -13,7 +13,7 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
   const [formattedBody, setFormattedBody] = useState<string>('');
 
 
-  const loadResponse = (requestId?: string) => {
+  const loadResponse = (_requestId?: string) => {
     try {
       // const res = await storageService.getResponse(requestId);
       // setResponse(res);
