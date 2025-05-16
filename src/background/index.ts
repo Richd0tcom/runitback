@@ -1,5 +1,5 @@
 import storageService from "../services/storage";
-import { RequestData, RequestCollection, ReqResHeaders, ResponseData } from "../models/requests";
+import { RequestData,ReqResHeaders, ResponseData } from "../models/requests";
 
 const inFlightReqStore = new Map<string, { startTime: number, data: RequestData }>()
 

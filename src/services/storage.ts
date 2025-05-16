@@ -89,15 +89,15 @@ class Storage {
       const tx = this.db!.transaction('responses', 'readwrite')
       const store = tx.objectStore('responses')
       const saveRes = store.put(response)
-  
-      saveRes.onsuccess = ()=> {
+
+      saveRes.onsuccess = () => {
         resolve(response.requestID)
       }
 
       saveRes.onerror = (e: Event) => {
         reject((e.target as IDBRequest).error)
       }
-  
+
     })
 
   }
@@ -107,7 +107,7 @@ class Storage {
   async getRequests(filter?: GetRequestFilter): Promise<RequestData[]> {
     await this.mustDBInit()
 
-    return new Promise((resolve, reject)=> {
+    return new Promise((resolve, reject) => {
 
       // const requests: RequestData[] = []
       const tx = this.db!.transaction('requests', 'readonly')
@@ -115,10 +115,10 @@ class Storage {
       const reqs = store.getAll()
 
 
-      reqs.onsuccess = ()=> {
+      reqs.onsuccess = () => {
         let results = reqs.result
 
-        if(filter){
+        if (filter) {
 
           //NOTE: filters use an AND pattern. if the results of previous filters return an empyt list, 
           // the final result will be empty regardless of if the subsequesnt filters hold true.
@@ -127,22 +127,22 @@ class Storage {
 
 
           if (filter.url) {
-            results = results.filter((req: RequestData)=> req.url.includes(filter.url!))
+            results = results.filter((req: RequestData) => req.url.includes(filter.url!))
           }
 
           if (filter.collectionId) {
-            results = results.filter((req: RequestData)=> req.collectionID === filter.collectionId! )
+            results = results.filter((req: RequestData) => req.collectionID === filter.collectionId!)
           }
-          if(filter.method) {
-            results = results.filter((req: RequestData)=> req.method === filter.method)
-          }
-
-          if(filter.timeEnd) {
-            results = results.filter((req: RequestData)=> req.timestamp <= filter.timeEnd!)
+          if (filter.method) {
+            results = results.filter((req: RequestData) => req.method === filter.method)
           }
 
-          if(filter.timeStart) {
-            results = results.filter((req: RequestData)=> req.timestamp >= filter.timeStart!)
+          if (filter.timeEnd) {
+            results = results.filter((req: RequestData) => req.timestamp <= filter.timeEnd!)
+          }
+
+          if (filter.timeStart) {
+            results = results.filter((req: RequestData) => req.timestamp >= filter.timeStart!)
           }
         }
 
@@ -151,6 +151,61 @@ class Storage {
 
       reqs.onerror = (e: Event) => {
         reject((e.target as IDBRequest).error)
+      }
+    })
+  }
+
+  async getResponse(requestId: string): Promise<ResponseData | null> {
+
+    await this.mustDBInit()
+
+    return new Promise((resolve, reject) => {
+      const tx = this.db!.transaction("responses", "readonly")
+      const store = tx.objectStore("responses")
+      const getResponse = store.get(requestId);
+
+      getResponse.onsuccess = () => {
+        resolve(getResponse.result || null)
+      }
+
+      getResponse.onerror = (e: Event) => {
+        reject((e.target as IDBRequest).error)
+      }
+
+    })
+  }
+
+  async deleteRequest(requestId: string): Promise<void> {
+    await this.mustDBInit()
+    return new Promise((resolve, reject)=>{
+      const tx = this.db!.transaction(["requests","responses"], "readwrite")
+      tx.objectStore("requests").delete(requestId)
+      tx.objectStore("requests").delete(requestId)
+
+      tx.oncomplete = ()=>{
+        resolve()
+      }
+
+      tx.onerror = (e: Event)=>{
+        reject((e.target as IDBTransaction).error)
+      }
+    })
+  }
+    
+  async clearAllData(): Promise<void> {
+    await this.mustDBInit()
+    return new Promise((resolve, reject)=>{
+      const tx = this.db!.transaction(["requests","responses", "collection"], "readwrite")
+      tx.objectStore("requests").clear()
+      tx.objectStore("requests").clear()
+      tx.objectStore("collections").clear()
+
+      tx.oncomplete = ()=>{
+        resolve()
+      }
+
+      tx.onerror = (e: Event)=>{
+        reject((e.target as IDBTransaction).error)
       }
     })
   }

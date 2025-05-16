@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { RequestData, ResponseData } from '../models/requests';
+import storage from '../services/storage';
+import replayService from '../services/replay';
 
 
 interface RequestDetailProps {
@@ -13,11 +15,10 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
   const [formattedBody, setFormattedBody] = useState<string>('');
 
 
-  const loadResponse = (requestId?: string) => {
+  const loadResponse = async (requestId: string) => {
     try {
-      // const res = await storageService.getResponse(requestId);
-      // setResponse(res);
-      setResponse(null)
+      const res = await storage.getResponse(requestId);
+      setResponse(res);
     } catch (error) {
       console.error('failed to load response', error)
     }
@@ -33,20 +34,20 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
   const formatBody = () => {
     if (activeTab == 'request' && request?.body) {
       try {
-        
+
         const parsed = JSON.parse(request.body);
         setFormattedBody(JSON.stringify(parsed, null, 2));
       } catch {
-        
+
         setFormattedBody(request.body);
       }
     } else if (activeTab == 'response' && response?.body) {
       try {
-        
+
         const parsed = JSON.parse(response.body);
         setFormattedBody(JSON.stringify(parsed, null, 2));
       } catch {
-        
+
         setFormattedBody(response.body);
       }
     } else {
@@ -66,6 +67,18 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
         Select a request to view details
       </div>
     );
+  }
+
+  const handleRequestReplay = async () => {
+    if (!request) return;
+
+    try {
+      const replayedResponse = await replayService.replayRequest(request)
+      setResponse(replayedResponse)
+    } catch (error) {
+      console.error('Failed to replay request:', error);
+      alert('Failed to replay request. See console for details.');
+    }
   }
 
   return (
@@ -114,9 +127,9 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
             <>
               <div className="mb-4">
                 <span className={`px-2 py-1 rounded text-xs font-bold ${response.status < 300 ? 'bg-green-100 text-green-800' :
-                    response.status < 400 ? 'bg-yellow-100 text-yellow-800' :
-                      response.status < 500 ? 'bg-orange-100 text-orange-800' :
-                        'bg-red-100 text-red-800'
+                  response.status < 400 ? 'bg-yellow-100 text-yellow-800' :
+                    response.status < 500 ? 'bg-orange-100 text-orange-800' :
+                      'bg-red-100 text-red-800'
                   }`}>
                   {response.status} {response.statusText}
                 </span>
@@ -153,7 +166,7 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
       <div className="p-2 border-t bg-gray-50">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={() => console.log('Replay request - to be implemented')}
+          onClick={handleRequestReplay}
         >
           Replay Request
         </button>
