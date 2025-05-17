@@ -1,5 +1,8 @@
 import storageService from "../services/storage";
 import { RequestData,ReqResHeaders, ResponseData } from "../models/requests";
+import { messageService, MessageType } from "../services/messaging";
+
+let isCapturing = true;
 
 const inFlightReqStore = new Map<string, { startTime: number, data: RequestData }>()
 
@@ -13,7 +16,31 @@ chrome.action.onClicked.addListener(() => {
     })
 })
 
+// Add message listener to the background script
+messageService.addListener((message, _sender) => {
+  switch (message.type) {
+    case MessageType.TOGGLE_CAPTURE:
+      isCapturing = message.payload.enabled;
+      console.log(`Request capture ${isCapturing ? 'enabled' : 'disabled'}`);
+      break;
+      
+    case MessageType.CLEAR_REQUESTS:
+      storageService.clearAllData()
+        .then(() => {
+          console.log('All request data cleared');
+        })
+        .catch(error => {
+          console.error('Failed to clear request data:', error);
+        });
+      break;
+  }
+});
+
 function shouldCaptureReq(details: chrome.webRequest.WebRequestBodyDetails): boolean {
+
+    if (!isCapturing) return false;
+
+
     if (details.url.startsWith("chrome-extension://")) {
         return false
     };
