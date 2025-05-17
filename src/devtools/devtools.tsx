@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import RequestList from '../components/request-list';
 import RequestDetail from '../components/request-detail';
 import { RequestData } from '../models/requests';
+import { messageService, MessageType } from '../services/messaging';
 
 const Devtools: React.FC = () => {
   const [selectedRequest, setSelectedRequest] = useState<RequestData | null>(null);
@@ -9,14 +10,28 @@ const Devtools: React.FC = () => {
 
 
   const toggleRequestCapture = ()=> {
+    const newCaptureState = !isCapturing;
     //TODO: communicate with background script to disable/enable capture
     setIsCapturing(!isCapturing)
+
+    messageService.sendToBackground({
+      type: MessageType.TOGGLE_CAPTURE,
+      payload: {
+        enabled: newCaptureState
+      }
+    })
   }
 
 
   const handleClearRequests = () => {
-    //TODO: clear all stored requests
-    console.log('Clear requests - to be implemented');
+    if (window.confirm('Are you sure you want to clear all captured requests?')) {
+      messageService.sendToBackground({
+        type: MessageType.CLEAR_REQUESTS
+      });
+      
+      // Also clear the selected request
+      setSelectedRequest(null);
+    }
   };
 
 
