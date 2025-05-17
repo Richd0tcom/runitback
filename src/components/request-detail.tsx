@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { RequestData, ResponseData } from '../models/requests';
 import storage from '../services/storage';
 import replayService from '../services/replay';
+import RequestEditor from './request-editor';
 
 
 interface RequestDetailProps {
   request: RequestData | null;
-
+  onRequestModified?: (request: RequestData) => void
 }
 
-const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
+const RequestDetail: React.FC<RequestDetailProps> = ({ request, onRequestModified }) => {
   const [response, setResponse] = useState<ResponseData | null>(null);
   const [activeTab, setActiveTab] = useState<'request' | 'response'>('request');
   const [formattedBody, setFormattedBody] = useState<string>('');
-
+  const [isEditing, setIsEditing] = useState<boolean>(false)
 
   const loadResponse = async (requestId: string) => {
     try {
@@ -79,6 +80,34 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
       console.error('Failed to replay request:', error);
       alert('Failed to replay request. See console for details.');
     }
+  }
+
+  const handleEditRequest = () => {
+    setIsEditing(true)
+  }
+
+  const handleEditSave = (modifiedRequest: RequestData) => {
+    setIsEditing(false)
+
+    /**
+     * TODO: 
+     * 1. update the UI with the edited request
+     * 2. save this to a "modified requests" collection
+     * 
+     */
+
+    onRequestModified?.(modifiedRequest)
+
+  }
+
+  if (isEditing && request) {
+    return (
+      <RequestEditor
+        request={request}
+        onSave={handleEditSave}
+        onCancel={() => setIsEditing(false)}
+      />
+    );
   }
 
   return (
@@ -163,12 +192,19 @@ const RequestDetail: React.FC<RequestDetailProps> = ({ request }) => {
         )}
       </div>
 
-      <div className="p-2 border-t bg-gray-50">
+      <div className="p-2 border-t bg-gray-50 flex gap-2">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           onClick={handleRequestReplay}
         >
           Replay Request
+        </button>
+
+        <button
+          className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+          onClick={handleEditRequest}
+        >
+          Edit Request
         </button>
       </div>
     </div>

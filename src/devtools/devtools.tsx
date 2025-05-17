@@ -4,6 +4,8 @@ import RequestDetail from '../components/request-detail';
 import { RequestData } from '../models/requests';
 import { messageService, MessageType } from '../services/messaging';
 
+
+//Devtools panel
 const Devtools: React.FC = () => {
   const [selectedRequest, setSelectedRequest] = useState<RequestData | null>(null);
   const [isCapturing, setIsCapturing] = useState<boolean>(true);

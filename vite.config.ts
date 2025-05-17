@@ -14,8 +14,11 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        devtools: resolve(root, 'devtools', 'index.html'),
-        popup: resolve(root, 'popup', 'index.html')
+        popup: resolve(root, 'popup', 'index.html'),
+        background: resolve(root, 'background', 'index.ts'),
+        content: resolve(root, 'content', 'index.ts'),
+        devtools: resolve(root, 'devtools', 'devtools.html'),
+        devtools_panel: resolve(root, 'devtools', 'devtools_panel.html')
       },
     }
   }
