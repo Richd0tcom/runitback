@@ -15,7 +15,7 @@ A powerful Chrome extension for capturing, inspecting, and replaying network req
 
 1. Clone the repository:
 ```bash
-git clone [repository-url]
+git clone https://github.com/Richd0tcom/runitback
 cd runitback
 ```
 
@@ -42,21 +42,21 @@ npm run build
 
 ### Production Installation
 
-[Add Chrome Web Store link when available]
+Coming Soon! 
 
 ## Usage
 
 ### Capturing Requests
+<img width="330" alt="Screenshot 2025-05-21 at 14 44 58" src="https://github.com/user-attachments/assets/1bdaa2d0-1fc7-45ea-ba21-811b38e9a009" />
 
-[Add screenshot of request capture interface]
 
 1. Click the extension icon in your browser toolbar
 2. Navigate to the "Capture" tab
 3. Browse your target website - requests will be automatically captured
 
 ### Replaying Requests
+<img width="1280" alt="Screenshot 2025-05-21 at 14 45 14" src="https://github.com/user-attachments/assets/c2947dc2-3a52-4789-a10d-440440d7afe0" />
 
-[Add screenshot of request replay interface]
 
 1. Select a captured request from the list
 2. Click the "Replay" button to send the request
@@ -64,16 +64,12 @@ npm run build
 
 ### Editing Requests
 
-[Add screenshot of request editor]
-
 1. Select a request from the list
 2. Click "Edit Request"
 3. Modify headers, body, or other request details
 4. Save changes and replay the modified request
 
 ### DevTools Integration
-
-[Add screenshot of DevTools panel]
 
 1. Open Chrome DevTools (F12)
 2. Navigate to the "Run It Back" panel
@@ -98,8 +94,7 @@ src/
 
 - `npm run dev` - Start development server
 - `npm run build` - Build extension for production
-- `npm run test` - Run tests
-- `npm run lint` - Run linter
+
 
 ### Tech Stack
 
@@ -118,8 +113,8 @@ src/
 
 ## License
 
-[Add license information]
+
 
 ## Support
 
-[Add support information or contact details]
+Email: tuberich0@gmail.com
