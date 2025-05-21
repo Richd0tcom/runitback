@@ -113,7 +113,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener((details) => {
     return { requestHeaders: details.requestHeaders }
 
 
-}, { urls: ["<all_urls>"] }, ["blocking", "requestHeaders"])
+}, { urls: ["<all_urls>"] }, ["requestHeaders"])
 
 chrome.webRequest.onHeadersReceived.addListener((details) => {
     const reqID = details.requestId

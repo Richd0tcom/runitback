@@ -29,7 +29,7 @@ export class MessageService {
 
     // Listen for messages
     addListener(callback: (message: Message, sender: chrome.runtime.MessageSender)=> void): void {
-        return chrome.runtime.onMessage.addListener((message, sender, sendResponse)=> {
+        return chrome.runtime.onMessage.addListener((message, sender, _sendResponse)=> {
             callback(message, sender)
 
             return true
