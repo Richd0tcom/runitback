@@ -3,18 +3,25 @@
     "name": "Request Replay",
     "version": "1.0.0",
     "description": "Capture and replay XHR/fetch requests directly from your browser",
+    "declarative_net_request": {
+        "rule_resources": [
+            
+        ]
+    },
     "permissions": [
-        "webRequest",
-        "webRequestBlocking",
         "storage",
         "tabs",
-        "scripting"
+        "scripting",
+        "webRequest",
+        "declarativeNetRequest",
+        "declarativeNetRequestFeedback"
     ],
     "host_permissions": [
         "<all_urls>"
     ],
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "assets/background.js",
+        "type": "module"
     },
     "content_scripts": [
         {
@@ -22,22 +29,13 @@
                 "<all_urls>"
             ],
             "js": [
-                "content.js"
+                "assets/content.js"
             ]
         }
     ],
-    "devtools_page": "devtools/index.html",
+    "devtools_page": "devtools/devtools.html",
     "action": {
-        "default_popup": "popup/index.html",
-        "default_icon": {
-            "16": "icons/icon16.png",
-            "48": "icons/icon48.png",
-            "128": "icons/icon128.png"
-        }
-    },
-    "icons": {
-        "16": "icons/icon16.png",
-        "48": "icons/icon48.png",
-        "128": "icons/icon128.png"
+        "default_popup": "popup/index.html"
+
     }
 }
